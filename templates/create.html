@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Shipment - Samuel Freight Service</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 750px; margin: 40px auto; padding: 20px; }
+        label { display: block; margin-top: 12px; font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; }
+        button { margin-top: 20px; padding: 12px 30px; background: #1a73e8; color: white; border: none; cursor: pointer; }
+        .hidden { display: none; }
+    </style>
+    <script>
+        function toggleCustom() {
+            const select = document.getElementById('pickup_location');
+            const custom = document.getElementById('custom_div');
+            custom.style.display = select.value === 'Custom' ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <h2>Create New Shipment - Samuel Freight Service</h2>
+    <form method="POST">
+        <h3>Sender (From)</h3>
+        <label>Name</label>
+        <input type="text" name="sender_name" required>
+        <label>Phone</label>
+        <input type="text" name="sender_phone" required>
+        <label>Address</label>
+        <textarea name="sender_address" rows="2" required></textarea>
+
+        <h3>Receiver (To)</h3>
+        <label>Name</label>
+        <input type="text" name="receiver_name" required>
+        <label>Phone</label>
+        <input type="text" name="receiver_phone" required>
+        <label>Email (for arrival notification)</label>
+        <input type="email" name="receiver_email" required>
+        <label>Address</label>
+        <textarea name="receiver_address" rows="2" required></textarea>
+
+        <label>Package Count</label>
+        <input type="text" name="package_count" value="1 of 1" required>
+
+        <label>Delivery Type</label>
+        <input type="text" name="delivery_type" value="Door-to-Door">
+
+        <label>Pickup Location</label>
+        <select name="pickup_location" id="pickup_location" onchange="toggleCustom()" required>
+            <option value="Nigeria">Nigeria Office</option>
+            <option value="Canada">Canada Office</option>
+            <option value="Custom">Custom Address</option>
+        </select>
+
+        <div id="custom_div" class="hidden">
+            <label>Custom Pickup Address</label>
+            <textarea name="custom_pickup" rows="2"></textarea>
+        </div>
+
+        <button type="submit">Create Shipment & Generate Label</button>
+    </form>
+    <p><a href="/list">View All Shipments</a></p>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Track Shipment - Samuel Freight Service</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 40px 20px; }
+        .box { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h1 { text-align: center; color: #071624; margin-bottom: 8px; }
+        .sub { text-align: center; color: #5d6d7c; margin-bottom: 25px; }
+        .row { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { flex: 1; padding: 14px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; }
+        button { padding: 14px 24px; background: #0f766e; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        button:hover { background: #0d5f58; }
+        .result { display: none; margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+        .status { background: #e7f7f4; color: #0f766e; padding: 12px; border-radius: 8px; font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .status.arrived { background: #d4edda; color: #155724; }
+        .status.pending { background: #fff3cd; color: #856404; }
+        .info { line-height: 1.8; }
+        .info b { display: inline-block; width: 140px; color: #333; }
+        .not-found { color: #721c24; background: #f8d7da; padding: 15px; border-radius: 8px; text-align: center; }
+        .links { text-align: center; margin-top: 25px; }
+        .links a { color: #0f766e; margin: 0 10px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Track Your Shipment</h1>
+        <p class="sub">Samuel Freight Service</p>
+
+        <div class="row">
+            <input type="text" id="trackingInput" placeholder="Enter tracking number (e.g. SF00002)" onkeypress="if(event.key==='Enter') track()">
+            <button onclick="track()">Track</button>
+        </div>
+
+        <div id="result" class="result"></div>
+
+        <div class="links">
+            <a href="/list">Staff List</a>
+            <a href="/create">Create Shipment</a>
+        </div>
+    </div>
+
+    <script>
+        function track() {
+            const tracking = document.getElementById('trackingInput').value.trim().toUpperCase();
+            const resultDiv = document.getElementById('result');
+
+            if (!tracking) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<div class="not-found">Please enter a tracking number</div>';
+                return;
+            }
+
+            fetch('/api/track/' + tracking)
+                .then(res => res.json())
+                .then(data => {
+                    resultDiv.style.display = 'block';
+                    if (!data.found) {
+                        resultDiv.innerHTML = '<div class="not-found">Tracking number not found.<br>Please check and try again.</div>';
+                        return;
+                    }
+
+                    let statusClass = data.status.toLowerCase() === 'arrived' ? 'arrived' : 'pending';
+                    let pickup = data.pickup_location;
+                    if (data.pickup_location === 'Custom' && data.custom_pickup) {
+                        pickup = data.custom_pickup;
+                    }
+
+                    resultDiv.innerHTML = `
+                        <div class="status ${statusClass}">Status: ${data.status}</div>
+                        <div class="info">
+                            <div><b>Tracking Number:</b> ${data.tracking_number}</div>
+                            <div><b>From:</b> ${data.sender_name}</div>
+                            <div><b>To:</b> ${data.receiver_name}</div>
+                            <div><b>Phone:</b> ${data.receiver_phone}</div>
+                            <div><b>Package:</b> ${data.package_count}</div>
+                            <div><b>Delivery:</b> ${data.delivery_type}</div>
+                            <div><b>Pickup:</b> ${pickup}</div>
+                            <div><b>Created:</b> ${data.created_at}</div>
+                        </div>
+                    `;
+                })
+                .catch(err => {
+                    resultDiv.style.display = 'block';
+                    resultDiv.innerHTML = '<div class="not-found">Error connecting to server. Make sure the app is running.</div>';
+                });
+        }
+    </script>
+</body>
+</html>

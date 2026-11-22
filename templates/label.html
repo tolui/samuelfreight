@@ -1,0 +1,211 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Label {{ s.tracking_number }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .label {
+            border: 2px solid #000;
+            width: 650px;
+            padding: 0;
+            margin: 0 auto;
+            font-size: 13px;
+        }
+        .header {
+            text-align: center;
+            padding: 10px 15px 5px;
+            border-bottom: 1px solid #000;
+            position: relative;
+        }
+        .company {
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .locations {
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        .pkg {
+            position: absolute;
+            right: 15px;
+            top: 12px;
+            text-align: right;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .tracking-section {
+            text-align: center;
+            padding: 8px 15px;
+        }
+        .tracking-label {
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .tracking-box {
+            border: 2px solid #000;
+            display: inline-block;
+            padding: 6px 40px;
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .addresses {
+            display: flex;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+        .col {
+            flex: 1;
+            padding: 10px 12px;
+        }
+        .col:first-child {
+            border-right: 1px solid #000;
+        }
+        .col-title {
+            font-size: 11px;
+            font-weight: bold;
+            text-decoration: underline;
+            margin-bottom: 4px;
+        }
+        .name {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        .delivery-row {
+            display: flex;
+            border-bottom: 1px solid #000;
+        }
+        .delivery-left {
+            flex: 1;
+            padding: 10px 12px;
+        }
+        .delivery-right {
+            width: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 1px solid #000;
+            padding: 10px;
+        }
+        .swift-box {
+            border: 3px solid #000;
+            padding: 8px 12px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .track-line {
+            text-align: center;
+            padding: 6px;
+            border-bottom: 1px solid #000;
+            font-size: 11px;
+        }
+        .office {
+            padding: 8px 12px;
+            border-bottom: 1px solid #000;
+            font-size: 12px;
+        }
+        .office-title {
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 12px;
+            font-size: 11px;
+        }
+        .no-print {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print">
+        <button onclick="window.print()">Print Label</button>
+        <a href="/list">Back to List</a>
+    </div>
+
+    <div class="label">
+        <!-- Header -->
+        <div class="header">
+            <div class="company">SAMUEL FREIGHT SERVICE</div>
+            <div class="locations">CALGARY · LAGOS</div>
+            <div class="pkg">
+                PKG {{ s.package_count }}
+            </div>
+        </div>
+
+        <!-- Tracking -->
+        <div class="tracking-section">
+            <div class="tracking-label">TRACKING NUMBER</div>
+            <div class="tracking-box">{{ s.tracking_number }}</div>
+        </div>
+
+        <!-- From / To -->
+        <div class="addresses">
+            <div class="col">
+                <div class="col-title">FROM (SHIPPER)</div>
+                <div class="name">{{ s.sender_name }}</div>
+                {{ s.sender_phone }}<br>
+                {{ s.sender_address }}
+            </div>
+            <div class="col">
+                <div class="col-title">TO (CONSIGNEE)</div>
+                <div class="name">{{ s.receiver_name }}</div>
+                {{ s.receiver_phone }}<br>
+                {{ s.receiver_address }}
+            </div>
+        </div>
+
+        <!-- Delivery + Swift Service -->
+        <div class="delivery-row">
+            <div class="delivery-left">
+                <div class="col-title">DELIVERY</div>
+                {{ s.delivery_type }}
+            </div>
+            <div class="delivery-right">
+                <div class="swift-box">
+                    SWIFT<br>SERVICE
+                </div>
+            </div>
+        </div>
+
+        <!-- Track line -->
+        <div class="track-line">
+            TRACK YOUR SHIPMENT<br>
+            Contact Samuel Freight Service
+        </div>
+
+        <!-- Canada Office -->
+        <div class="office">
+            <div class="office-title">DROP-OFF / CANADA WAREHOUSE</div>
+            445 Redstone Walk NE #202, Calgary, AB T3N 1M5<br>
+            Tel: +1 587 966 4811 | +1 587 889 0447
+        </div>
+
+        <!-- Nigeria Office -->
+        <div class="office">
+            <div class="office-title">NIGERIA OFFICE / AGENT</div>
+            19 Ajao Road, Ikeja, Lagos, Nigeria<br>
+            Tel: 0904 912 4622 | 0812 954 8890 | 0902 336 2725
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div>samuelfreightservice@gmail.com</div>
+            <div>Samuel Freight Service</div>
+        </div>
+    </div>
+</body>
+</html>
